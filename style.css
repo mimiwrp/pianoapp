@@ -1,0 +1,34 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+#piano {
+    display: flex;
+}
+
+.key {
+    width: 50px;
+    height: 200px;
+    background-color: white;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+
+.key.black {
+    width: 30px;
+    height: 120px;
+    background-color: grey;
+    margin-left: -15px;
+    margin-right: -15px;
+    z-index: 1;
+}
