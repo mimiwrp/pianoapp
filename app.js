@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const lessons = [
         { name: 'Lesson 1: C Major Scale', notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']},
-        { name: 'Lesson 1: G Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
+        { name: 'Lesson 2: G Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
     ];
 
     let currentLesson = null;
@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const keyElement = document.createElement('div');
         keyElement.className = `key ${key.type}`;
         keyElement.textContent = key.note;
+        keyElement.dataset.note = key.note;
         keyElement.addEventListener('click', () => playNote(key.note));
         piano.appendChild(keyElement);
     });
@@ -70,14 +71,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function highlightNextNote() {
         if(currentLesson && !userProgress[currentLesson.name].completed) {
+            //clear bg color of all keys
+            // const allKeys = document.querySelectorAll('.key');
+            // allKeys.forEach(key => key.style.backgroundColor = '');
+
             const noteIndex = userProgress[currentLesson.name].currentNoteIndex;
+
             const note = currentLesson.notes[noteIndex];
-            const keyElement = document.querySelector(`.key:contains(${note})`);
+            const keyElement = document.querySelector(`.key[data-note="${note}"]`);
             if(keyElement) {
-                keyElement.computedStyleMap.backgroundColor = 'yellow';
-                keyElement.addEventListener('click', () => {
+                //remove any existing event listener
+                keyElement.replaceWith(keyElement.cloneNode(true));
+                const newKeyElement = document.querySelector(`.key[data-note="${note}"]`);
+
+                newKeyElement.style.backgroundColor = 'yellow';
+                newKeyElement.addEventListener('click', () => {
                     playNote(note);
-                    keyElement.computedStyleMap.backgroundColor = '';
+                    // newKeyElement.style.backgroundColor = '';
                     userProgress[currentLesson.name].currentNoteIndex++;
                     if(userProgress[currentLesson.name].currentNoteIndex >= currentLesson.notes.length) {
                         userProgress[currentLesson.name].completed = true;
@@ -91,6 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateProgress() {
+        //clear bg color of all keys
+        const allKeys = document.querySelectorAll('.key');
+        allKeys.forEach(key => key.style.backgroundColor = '');
+
         progressDetails.innerHTML = '';
         for(const lessonName in userProgress){
             const progressItem = document.createElement('div');
