@@ -1,4 +1,4 @@
-import * as THREE from './node_modules/three/build/three.module.js';
+// import * as THREE from './node_modules/three/build/three.module.js';
 //for 2D no Three.js 
 document.addEventListener('DOMContentLoaded', () => {
     const piano = document.getElementById('piano');
@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     userProgress[currentLesson.name].currentNoteIndex++;
                     if(userProgress[currentLesson.name].currentNoteIndex >= currentLesson.notes.length) {
                         userProgress[currentLesson.name].completed = true;
+                        showCongratulations(currentLesson.name);
                         updateProgress();
                     }else {
                         highlightNextNote();
@@ -98,6 +99,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
+    }
+
+    function showCongratulations(lessonName) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <p>Congratulations! You have completed ${lessonName}. Great job!</p>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        const closeButton = modal.querySelector('.close-button');
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(modal);
+        })
     }
 
     function updateProgress() {
@@ -109,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const lessonName in userProgress){
             const progressItem = document.createElement('div');
             progressItem.className = 'progress-item';
-            progressItem.textContent = `${lessonName}: ${userProgress[lessonName].completed ? 'Completed' : 'In Progress'}`;
+            const status = userProgress[lessonName].completed ? 'Completed' : 'In Progress';
+            progressItem.textContent = `${lessonName}: ${status}`;
             progressDetails.appendChild(progressItem);
         }
     }
