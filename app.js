@@ -69,14 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
         lessonList.appendChild(lessonItem);
     })
 
-    function playNote(frequency) {
+    function initializeAudioContext() {
         if(!audioContext) {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            //ensure that the audio context is resumed if it is in a suspended state.
+            if(audioContext.state === 'suspend'){
+                audioContext.resume();
+            }
         }
-        //ensure that the audio context is resumed if it is in a suspended state.
-        if(audioContext.state === 'suspend'){
-            audioContext.resume();
-        }
+    }
+
+    function playNote(frequency) {
+        initializeAudioContext();
 
         const oscillator = audioContext.createOscillator();
         oscillator.type = 'sine';
@@ -157,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
             progressDetails.appendChild(progressItem);
         }
     }
+
+    //add a user interaction prompt to initialize the audio context
+    document.body.addEventListener('click', initializeAudioContext, { once: true});
 })
 
 
