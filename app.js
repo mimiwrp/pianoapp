@@ -34,7 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const lessons = [
         { name: 'Lesson 1: C Major Scale', notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']},
-        { name: 'Lesson 2: G Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
+        { name: 'Lesson 2: D Major Scale', notes: ['D4', 'E4', 'F#4', 'G4', 'A4', 'B4', 'C#5', 'D5']},
+        { name: 'Lesson 3: E Major Scale', notes: ['E4', 'F#4', 'G#4', 'A4', 'B4', 'C#5', 'D#5', 'E5']},
+        { name: 'Lesson 4: F Major Scale', notes: ['F4', 'G4', 'A4', 'A#4', 'C5', 'D5', 'E5', 'F5']},
+        { name: 'Lesson 5: G Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
+        { name: 'Lesson 6: A Major Scale', notes: ['A4', 'B4', 'C#5', 'D5', 'E5', 'F#5', 'G#5', 'A5']},
+        { name: 'Lesson 7: B Major Scale', notes: ['B4', 'C#5', 'D#5', 'E5', 'F#5', 'G#5', 'A#5', 'B5']},
+        // { name: 'Lesson 8: C# | Db Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
+        // { name: 'Lesson 9: D# | Eb Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
+        // { name: 'Lesson 10: F# | Gb Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
+        // { name: 'Lesson 11: G# | Ab Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
+        // { name: 'Lesson 12: A# | Bb Major Scale', notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']},
     ];
 
     let currentLesson = null;
