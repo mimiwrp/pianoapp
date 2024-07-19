@@ -6,30 +6,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressDetails = document.getElementById('progress-details');
 
     const keys = [
-        { note: 'C4', type: 'white'},
-        { note: 'C#4', type: 'black'},
-        { note: 'D4', type: 'white'},
-        { note: 'D#4', type: 'black'},
-        { note: 'E4', type: 'white'},
-        { note: 'F4', type: 'white'},
-        { note: 'F#4', type: 'black'},
-        { note: 'G4', type: 'white'},
-        { note: 'G#4', type: 'black'},
-        { note: 'A4', type: 'white'},
-        { note: 'A#4', type: 'black'},
-        { note: 'B4', type: 'white'},
-        { note: 'C5', type: 'white'},
-        { note: 'C#5', type: 'black'},
-        { note: 'D5', type: 'white'},
-        { note: 'D#5', type: 'black'},
-        { note: 'E5', type: 'white'},
-        { note: 'F5', type: 'white'},
-        { note: 'F#5', type: 'black'},
-        { note: 'G5', type: 'white'},
-        { note: 'G#5', type: 'black'},
-        { note: 'A5', type: 'white'},
-        { note: 'A#5', type: 'black'},
-        { note: 'B5', type: 'white'},
+        { note: 'C4', type: 'white', frequency: 261.63 },
+        { note: 'C#4', type: 'black', frequency: 277.18 },
+        { note: 'D4', type: 'white', frequency: 293.66 },
+        { note: 'D#4', type: 'black', frequency: 311.13 },
+        { note: 'E4', type: 'white', frequency: 329.63 },
+        { note: 'F4', type: 'white', frequency: 349.23 },
+        { note: 'F#4', type: 'black', frequency: 369.99 },
+        { note: 'G4', type: 'white', frequency: 392.00 },
+        { note: 'G#4', type: 'black', frequency: 415.30 },
+        { note: 'A4', type: 'white', frequency: 440.00 },
+        { note: 'A#4', type: 'black', frequency: 466.16 },
+        { note: 'B4', type: 'white', frequency: 493.88 },
+        { note: 'C5', type: 'white', frequency: 523.25 },
+        { note: 'C#5', type: 'black', frequency: 554.37 },
+        { note: 'D5', type: 'white', frequency: 587.33 },
+        { note: 'D#5', type: 'black', frequency: 622.25 },
+        { note: 'E5', type: 'white', frequency: 659.25 },
+        { note: 'F5', type: 'white', frequency: 698.46 },
+        { note: 'F#5', type: 'black', frequency: 739.99 },
+        { note: 'G5', type: 'white', frequency: 783.99 },
+        { note: 'G#5', type: 'black', frequency: 830.61 },
+        { note: 'A5', type: 'white', frequency: 880.00 },
+        { note: 'A#5', type: 'black', frequency: 932.33 },
+        { note: 'B5', type: 'white', frequency: 987.77 }
     ];
 
     const lessons = [
@@ -49,13 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentLesson = null;
     let userProgress = {};
+    let audioContext = null;
 
     keys.forEach(key => {
         const keyElement = document.createElement('div');
         keyElement.className = `key ${key.type}`;
         keyElement.textContent = key.note;
         keyElement.dataset.note = key.note;
-        keyElement.addEventListener('click', () => playNote(key.note));
+        keyElement.dataset.frequency = key.frequency;
+        keyElement.addEventListener('click', () => playNote(key.frequency));
         piano.appendChild(keyElement);
     });
 
@@ -67,10 +69,21 @@ document.addEventListener('DOMContentLoaded', () => {
         lessonList.appendChild(lessonItem);
     })
 
-    function playNote(note) {
-        const encodedNote = encodeURIComponent(note);
-        const audio = new Audio(`sounds/${encodedNote}.mp3`);
-        audio.play();
+    function playNote(frequency) {
+        if(!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        //ensure that the audio context is resumed if it is in a suspended state.
+        if(audioContext.state === 'suspend'){
+            audioContext.resume();
+        }
+
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.4); //play the note for 1 second
     }
 
     function startLesson(lesson) {
@@ -96,7 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 newKeyElement.style.backgroundColor = 'yellow';
                 newKeyElement.addEventListener('click', () => {
-                    playNote(note);
+                    const frequency = parseFloat(newKeyElement.dataset.frequency);
+
+                    playNote(frequency);
                     // newKeyElement.style.backgroundColor = '';
                     userProgress[currentLesson.name].currentNoteIndex++;
                     if(userProgress[currentLesson.name].currentNoteIndex >= currentLesson.notes.length) {
