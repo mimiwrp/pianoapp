@@ -17,7 +17,7 @@ const Key = ({ note, type, frequency, playNote, highlight, updateProgress, curre
         }
     };
     return (
-        <div className={`key ${highlight ? 'highlight' : ''}`} onClick={handleClick}>
+        <div className={`key ${type} ${highlight ? 'highlight' : ''}`} onClick={handleClick}>
             {note}
         </div>
     )
