@@ -1,7 +1,7 @@
 import React from 'react';
 import Key from './Key';
 
-const Piano = ({ keys, currentLesson, userProgress, updateProgress, showModal}) => {
+const Piano = ({ keys, currentLesson, userProgress, updateProgress}) => {
     const playNote = (frequency) => {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         if(audioContext.state === 'suspended') {
@@ -41,7 +41,6 @@ const Piano = ({ keys, currentLesson, userProgress, updateProgress, showModal}) 
                     updateProgress={updateProgress}
                     currentLesson={currentLesson}
                     userProgress={userProgress}
-                    showModal={showModal}
                 />
             ))}
         </div>

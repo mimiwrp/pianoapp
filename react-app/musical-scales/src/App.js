@@ -8,7 +8,7 @@ import './App.css';
 function App() {
   const [currentLesson, setCurrentLesson] = useState(null);
   const [userProgress, setUserProgress] = useState({});
-  const [showModal, setShowModal] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const keys = [
     { note: 'C4', type: 'white', frequency: 261.63 }, { note: 'C#4', type: 'black', frequency: 277.18 },
@@ -46,13 +46,19 @@ function App() {
       ...prevProgress,
       [lesson.name]: { completed: false, currentNoteIndex: 0}
     }));
+    setShowModal(false);
   };
 
-  const updateProgress = (lessonName, completed) => {
-    setUserProgress((prevProgress) => ({
-      ...prevProgress,
-      [lessonName]: { ...prevProgress[lessonName], completed}
-    }));
+  const updateProgress = (lessonName, noteIndex) => {
+    setUserProgress((prevProgress) => {
+      const newProgress = { ...prevProgress };
+      newProgress[lessonName].currentNoteIndex = noteIndex;
+      newProgress[lessonName].completed = noteIndex >= lessons.find(lesson => lesson.name === lessonName).notes.length;
+      return newProgress;
+    });
+    if(userProgress[lessonName].completed){
+      setShowModal(true);
+    }
   };
 
   const closeModal = () => setShowModal(false);
@@ -60,7 +66,7 @@ function App() {
   return (
     <div className="App">
       <h1>Musical Scales on Piano</h1>
-      <Piano keys={keys} currentLesson={currentLesson} userProgress={userProgress} updateProgress={updateProgress} showModal={setShowModal}/>
+      <Piano keys={keys} currentLesson={currentLesson} userProgress={userProgress} updateProgress={updateProgress} />
       <Lesson lessons={lessons} startLesson={startLesson} />
       <Progress userProgress={userProgress}/>
       {showModal && <Modal lessonName={currentLesson.name} closeModal={closeModal} />}

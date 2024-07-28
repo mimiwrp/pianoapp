@@ -1,5 +1,5 @@
 import React from 'react';
-const Key = ({ note, type, frequency, playNote, highlight, updateProgress, currentLesson, userProgress, showModal}) => {
+const Key = ({ note, type, frequency, playNote, highlight, updateProgress, currentLesson, userProgress }) => {
     const handleClick = () => {
         playNote(frequency);
 
@@ -7,12 +7,12 @@ const Key = ({ note, type, frequency, playNote, highlight, updateProgress, curre
             const progress = userProgress[currentLesson.name];
             if(currentLesson.notes[progress.currentNoteIndex] === note){
                 const newNoteIndex = progress.currentNoteIndex + 1;
-                const completed = newNoteIndex >= currentLesson.notes.length;
-                updateProgress(currentLesson.name, completed);
+                // const completed = newNoteIndex >= currentLesson.notes.length;
+                updateProgress(currentLesson.name, newNoteIndex);
 
-                if(completed) {
-                    showModal(true);
-                }
+                // if(completed) {
+                //     showModal(true);
+                // }
             }
         }
     };
